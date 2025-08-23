@@ -121,6 +121,24 @@ def create_shutter_speed_apeture_iso_scatter(image_metadatas, lens_model, figure
     for image_metadata in image_metadatas:
         apetures.append(image_metadata.apeture)
         
+    # Calculate the sizes
+    current_shutter_speed = -1.0
+    current_apeture = -1.0
+    current_size = 0.0
+    sizes = []
+    
+    for i in range(len(apetures)):
+        if ((apetures[i] != current_apeture or shutter_speeds[i] != current_shutter_speed) and current_shutter_speed != -1.0 and current_apeture != -1.0):
+            sizes.append(current_size + 30)
+            current_size = 0.0
+            current_shutter_speed = -1.0
+            current_apeture = -1.0
+        else:
+            current_size = current_size + 1.0
+            current_shutter_speed = shutter_speeds[i]
+            current_apeture = apetures[i]
+            sizes.append((current_size * 3) + 30)
+        
     # Sort by iso
     image_metadatas.sort(key=lambda x: x.iso)
     isos = []
@@ -129,11 +147,11 @@ def create_shutter_speed_apeture_iso_scatter(image_metadatas, lens_model, figure
 
     # Create bar chart
     plt.figure()
-    plt.scatter(shutter_speeds, apetures, c=isos, cmap='coolwarm')
+    plt.scatter(shutter_speeds, apetures, c=isos, cmap='managua', s=sizes)
     plt.title(f"Shutter Speed / Apeture / ISO Scatter")
     plt.xlabel("Shutter Speed (s)")
     plt.ylabel("Apeture")
-    plt.colorbar()
+    plt.colorbar(fraction=0.05)
     plt.grid()
     plt.savefig(f"graphs/{figure_name}.png", dpi=300)
     
@@ -159,14 +177,32 @@ def create_shutter_speed_apeture_focal_length_scatter(image_metadatas, lens_mode
     focal_lengths = []
     for image_metadata in image_metadatas:
         focal_lengths.append(image_metadata.focal_length)
+        
+    # Calculate the sizes
+    current_shutter_speed = -1.0
+    current_apeture = -1.0
+    current_size = 0.0
+    sizes = []
+    
+    for i in range(len(apetures)):
+        if ((apetures[i] != current_apeture or shutter_speeds[i] != current_shutter_speed) and current_shutter_speed != -1.0 and current_apeture != -1.0):
+            sizes.append(current_size + 30)
+            current_size = 0.0
+            current_shutter_speed = -1.0
+            current_apeture = -1.0
+        else:
+            current_size = current_size + 1.0
+            current_shutter_speed = shutter_speeds[i]
+            current_apeture = apetures[i]
+            sizes.append((current_size * 3)  + 30)
 
     # Create bar chart
     plt.figure()
-    plt.scatter(shutter_speeds, apetures, c=focal_lengths, cmap='coolwarm')
+    plt.scatter(shutter_speeds, apetures, c=focal_lengths, cmap='managua', s=sizes)
     plt.title(f"Shutter Speed / Apeture / Focal Length Scatter")
     plt.xlabel("Shutter Speed (s)")
     plt.ylabel("Apeture")
-    plt.colorbar()
+    plt.colorbar(fraction=0.05)
     plt.grid()
     plt.savefig(f"graphs/{figure_name}.png", dpi=300)
 
