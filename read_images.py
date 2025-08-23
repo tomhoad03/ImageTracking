@@ -27,14 +27,14 @@ def create_focal_length_histogram(image_metadatas, lens_model, figure_name):
 
     # Create histogram
     plt.figure()
-    plt.hist(focal_lengths, bins=15, edgecolor="black")
+    plt.hist(focal_lengths, bins=25, edgecolor="black")
     plt.title("Focal Length Histogram")
     plt.xlabel("Focal Length (mm)")
     plt.ylabel("Frequency")
     plt.savefig(f"graphs/{figure_name}.png")
     
     
-def create_iso_histogram(image_metadatas, lens_model, figure_name):
+def create_iso_barchart(image_metadatas, lens_model, figure_name):
     # Filter by kit lens
     image_metadatas = [x for x in image_metadatas if x.lens_model == lens_model]
     
@@ -73,14 +73,14 @@ def create_shutter_speed_histogram(image_metadatas, lens_model, figure_name):
 
     # Create histogram
     plt.figure()
-    plt.hist(shutter_speeds, bins=15, edgecolor="black")
+    plt.hist(shutter_speeds, bins=25, edgecolor="black")
     plt.title("Shutter Speed Histogram")
     plt.xlabel("Shutter Speed (s)")
     plt.ylabel("Frequency")
     plt.savefig(f"graphs/{figure_name}.png")
     
 
-def create_apeture_histogram(image_metadatas, lens_model, figure_name):
+def create_apeture_barchart(image_metadatas, lens_model, figure_name):
     # Filter by kit lens
     image_metadatas = [x for x in image_metadatas if x.lens_model == lens_model]
     
@@ -90,13 +90,21 @@ def create_apeture_histogram(image_metadatas, lens_model, figure_name):
     for image_metadata in image_metadatas:
         apetures.append(image_metadata.apeture)
 
-    # Create histogram
+    # Count the frequency of each ISO value
+    apeture_counts = Counter(apetures)
+    apeture_values = sorted(apeture_counts.keys())
+    frequencies = [apeture_counts[apeture] for apeture in apeture_values]
+    apeture_strings = [str(x) for x in apeture_values]
+
+    # Create bar chart
     plt.figure()
-    plt.hist(apetures, bins=15, edgecolor="black")
-    plt.title("Apeture Histogram")
+    plt.bar(apeture_strings, frequencies, edgecolor="black")
+    plt.title(f"Apeture Bar Chart")
     plt.xlabel("Apeture")
     plt.ylabel("Frequency")
+    plt.xticks(apeture_strings, rotation=45)
     plt.savefig(f"graphs/{figure_name}.png")
+    plt.close()
 
 
 if __name__ == "__main__":
@@ -115,9 +123,9 @@ if __name__ == "__main__":
     
     create_focal_length_histogram(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "FocalLengthHistogramKit")
     create_focal_length_histogram(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "FocalLengthHistogramTele")
-    create_iso_histogram(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "ISOBarChartKit")
-    create_iso_histogram(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "ISOBarChartTele")
+    create_iso_barchart(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "ISOBarChartKit")
+    create_iso_barchart(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "ISOBarChartTele")
     create_shutter_speed_histogram(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "ShutterSpeedHistogramKit")
     create_shutter_speed_histogram(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "ShutterSpeedHistogramTele")
-    create_apeture_histogram(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "ApetureHistogramKit")
-    create_apeture_histogram(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "ApetureHistogramTele")
+    create_apeture_barchart(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "ApetureBarChartKit")
+    create_apeture_barchart(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "ApetureBarChartTele")
