@@ -56,9 +56,8 @@ def create_iso_barchart(image_metadatas, lens_model, figure_name):
     plt.title(f"ISO Bar Chart")
     plt.xlabel("ISO")
     plt.ylabel("Frequency")
-    plt.xticks(iso_strings, rotation=45)
+    plt.xticks(iso_strings)
     plt.savefig(f"graphs/{figure_name}.png", dpi=300)
-    plt.close()
     
 
 def create_shutter_speed_histogram(image_metadatas, lens_model, figure_name):
@@ -102,7 +101,7 @@ def create_apeture_barchart(image_metadatas, lens_model, figure_name):
     plt.title(f"Apeture Bar Chart")
     plt.xlabel("Apeture")
     plt.ylabel("Frequency")
-    plt.xticks(apeture_strings, rotation=45)
+    plt.xticks(apeture_strings)
     plt.savefig(f"graphs/{figure_name}.png", dpi=300)
 
 
@@ -135,6 +134,7 @@ def create_shutter_speed_apeture_iso_scatter(image_metadatas, lens_model, figure
     plt.xlabel("Shutter Speed (s)")
     plt.ylabel("Apeture")
     plt.colorbar()
+    plt.grid()
     plt.savefig(f"graphs/{figure_name}.png", dpi=300)
     
 
@@ -167,10 +167,14 @@ def create_shutter_speed_apeture_focal_length_scatter(image_metadatas, lens_mode
     plt.xlabel("Shutter Speed (s)")
     plt.ylabel("Apeture")
     plt.colorbar()
+    plt.grid()
     plt.savefig(f"graphs/{figure_name}.png", dpi=300)
 
 
 if __name__ == "__main__":
+    # plt basic params
+    plt.rcParams["figure.figsize"] = (18, 10)
+    
     image_metadatas = []
 
     # Read the metadata from the images

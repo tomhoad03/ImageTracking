@@ -1,0 +1,1 @@
+Insert your .JPG images into this folder, then run read_images.py.
