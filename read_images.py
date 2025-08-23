@@ -31,7 +31,7 @@ def create_focal_length_histogram(image_metadatas, lens_model, figure_name):
     plt.title("Focal Length Histogram")
     plt.xlabel("Focal Length (mm)")
     plt.ylabel("Frequency")
-    plt.savefig(f"graphs/{figure_name}.png")
+    plt.savefig(f"graphs/{figure_name}.png", dpi=300)
     
     
 def create_iso_barchart(image_metadatas, lens_model, figure_name):
@@ -57,7 +57,7 @@ def create_iso_barchart(image_metadatas, lens_model, figure_name):
     plt.xlabel("ISO")
     plt.ylabel("Frequency")
     plt.xticks(iso_strings, rotation=45)
-    plt.savefig(f"graphs/{figure_name}.png")
+    plt.savefig(f"graphs/{figure_name}.png", dpi=300)
     plt.close()
     
 
@@ -65,7 +65,7 @@ def create_shutter_speed_histogram(image_metadatas, lens_model, figure_name):
     # Filter by kit lens
     image_metadatas = [x for x in image_metadatas if x.lens_model == lens_model]
     
-    # Sort by focal length
+    # Sort by shutter speed
     image_metadatas.sort(key=lambda x: x.shutter_speed)
     shutter_speeds = []
     for image_metadata in image_metadatas:
@@ -73,18 +73,18 @@ def create_shutter_speed_histogram(image_metadatas, lens_model, figure_name):
 
     # Create histogram
     plt.figure()
-    plt.hist(shutter_speeds, bins=25, edgecolor="black")
+    plt.hist(shutter_speeds, bins=75, edgecolor="black")
     plt.title("Shutter Speed Histogram")
     plt.xlabel("Shutter Speed (s)")
     plt.ylabel("Frequency")
-    plt.savefig(f"graphs/{figure_name}.png")
+    plt.savefig(f"graphs/{figure_name}.png", dpi=300)
     
 
 def create_apeture_barchart(image_metadatas, lens_model, figure_name):
     # Filter by kit lens
     image_metadatas = [x for x in image_metadatas if x.lens_model == lens_model]
     
-    # Sort by focal length
+    # Sort by apeture
     image_metadatas.sort(key=lambda x: x.apeture)
     apetures = []
     for image_metadata in image_metadatas:
@@ -103,8 +103,71 @@ def create_apeture_barchart(image_metadatas, lens_model, figure_name):
     plt.xlabel("Apeture")
     plt.ylabel("Frequency")
     plt.xticks(apeture_strings, rotation=45)
-    plt.savefig(f"graphs/{figure_name}.png")
-    plt.close()
+    plt.savefig(f"graphs/{figure_name}.png", dpi=300)
+
+
+def create_shutter_speed_apeture_iso_scatter(image_metadatas, lens_model, figure_name):
+    # Filter by kit lens
+    image_metadatas = [x for x in image_metadatas if x.lens_model == lens_model]
+    
+    # Sort by shutter speed
+    image_metadatas.sort(key=lambda x: x.shutter_speed)
+    shutter_speeds = []
+    for image_metadata in image_metadatas:
+        shutter_speeds.append(image_metadata.shutter_speed)
+        
+    # Sort by apeture
+    image_metadatas.sort(key=lambda x: x.apeture)
+    apetures = []
+    for image_metadata in image_metadatas:
+        apetures.append(image_metadata.apeture)
+        
+    # Sort by iso
+    image_metadatas.sort(key=lambda x: x.iso)
+    isos = []
+    for image_metadata in image_metadatas:
+        isos.append(image_metadata.iso)
+
+    # Create bar chart
+    plt.figure()
+    plt.scatter(shutter_speeds, apetures, c=isos, cmap='viridis')
+    plt.title(f"Shutter Speed / Apeture / ISO Scatter")
+    plt.xlabel("Shutter Speed (s)")
+    plt.ylabel("Apeture")
+    plt.colorbar()
+    plt.savefig(f"graphs/{figure_name}.png", dpi=300)
+    
+
+def create_shutter_speed_apeture_focal_length_scatter(image_metadatas, lens_model, figure_name):
+    # Filter by kit lens
+    image_metadatas = [x for x in image_metadatas if x.lens_model == lens_model]
+    
+    # Sort by shutter speed
+    image_metadatas.sort(key=lambda x: x.shutter_speed)
+    shutter_speeds = []
+    for image_metadata in image_metadatas:
+        shutter_speeds.append(image_metadata.shutter_speed)
+        
+    # Sort by apeture
+    image_metadatas.sort(key=lambda x: x.apeture)
+    apetures = []
+    for image_metadata in image_metadatas:
+        apetures.append(image_metadata.apeture)
+        
+    # Sort by focal length
+    image_metadatas.sort(key=lambda x: x.focal_length)
+    focal_lengths = []
+    for image_metadata in image_metadatas:
+        focal_lengths.append(image_metadata.focal_length)
+
+    # Create bar chart
+    plt.figure()
+    plt.scatter(shutter_speeds, apetures, c=focal_lengths, cmap='viridis')
+    plt.title(f"Shutter Speed / Apeture / Focal Length Scatter")
+    plt.xlabel("Shutter Speed (s)")
+    plt.ylabel("Apeture")
+    plt.colorbar()
+    plt.savefig(f"graphs/{figure_name}.png", dpi=300)
 
 
 if __name__ == "__main__":
@@ -123,9 +186,18 @@ if __name__ == "__main__":
     
     create_focal_length_histogram(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "FocalLengthHistogramKit")
     create_focal_length_histogram(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "FocalLengthHistogramTele")
+    
     create_iso_barchart(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "ISOBarChartKit")
     create_iso_barchart(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "ISOBarChartTele")
+    
     create_shutter_speed_histogram(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "ShutterSpeedHistogramKit")
     create_shutter_speed_histogram(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "ShutterSpeedHistogramTele")
+    
     create_apeture_barchart(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "ApetureBarChartKit")
     create_apeture_barchart(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "ApetureBarChartTele")
+    
+    create_shutter_speed_apeture_iso_scatter(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "ApetureShutterISOScatterKit")
+    create_shutter_speed_apeture_iso_scatter(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "ApetureShutterISOScatterTele")
+    
+    create_shutter_speed_apeture_focal_length_scatter(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "ApetureShutterFocalScatterKit")
+    create_shutter_speed_apeture_focal_length_scatter(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "ApetureShutterFocalScatterTele")
