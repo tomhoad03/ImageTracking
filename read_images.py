@@ -129,7 +129,7 @@ def create_shutter_speed_apeture_iso_scatter(image_metadatas, lens_model, figure
     
     for i in range(len(apetures)):
         if ((apetures[i] != current_apeture or shutter_speeds[i] != current_shutter_speed) and current_shutter_speed != -1.0 and current_apeture != -1.0):
-            sizes.append(current_size + 30)
+            sizes.append(current_size + 20)
             current_size = 0.0
             current_shutter_speed = -1.0
             current_apeture = -1.0
@@ -137,7 +137,7 @@ def create_shutter_speed_apeture_iso_scatter(image_metadatas, lens_model, figure
             current_size = current_size + 1.0
             current_shutter_speed = shutter_speeds[i]
             current_apeture = apetures[i]
-            sizes.append((current_size * 3) + 30)
+            sizes.append((current_size * 3) + 20)
         
     # Sort by iso
     image_metadatas.sort(key=lambda x: x.iso)
@@ -186,7 +186,7 @@ def create_shutter_speed_apeture_focal_length_scatter(image_metadatas, lens_mode
     
     for i in range(len(apetures)):
         if ((apetures[i] != current_apeture or shutter_speeds[i] != current_shutter_speed) and current_shutter_speed != -1.0 and current_apeture != -1.0):
-            sizes.append(current_size + 30)
+            sizes.append(current_size + 20)
             current_size = 0.0
             current_shutter_speed = -1.0
             current_apeture = -1.0
@@ -194,7 +194,7 @@ def create_shutter_speed_apeture_focal_length_scatter(image_metadatas, lens_mode
             current_size = current_size + 1.0
             current_shutter_speed = shutter_speeds[i]
             current_apeture = apetures[i]
-            sizes.append((current_size * 3)  + 30)
+            sizes.append((current_size * 3)  + 20)
 
     # Create bar chart
     plt.figure()
@@ -209,7 +209,7 @@ def create_shutter_speed_apeture_focal_length_scatter(image_metadatas, lens_mode
 
 if __name__ == "__main__":
     # plt basic params
-    plt.rcParams["figure.figsize"] = (18, 10)
+    plt.rcParams["figure.figsize"] = (16, 16)
     
     image_metadatas = []
 
