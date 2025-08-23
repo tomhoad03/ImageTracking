@@ -1,0 +1,2 @@
+* read_image.py - generates the full list of the exif tag values, which gives the codes for shutter speed, iso, focal length, etc.
+* read_images.py - reads the photos from a folder called images in this repo
