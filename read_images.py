@@ -148,6 +148,9 @@ def create_shutter_speed_apeture_iso_scatter(image_metadatas, lens_model, figure
     # Create bar chart
     plt.figure()
     plt.scatter(shutter_speeds, apetures, c=isos, cmap='managua', s=sizes)
+    # ax = plt.gca()
+    # ax.set_xlim([0, 0.05])
+    # ax.set_ylim([3, 12])
     plt.title(f"Shutter Speed / Apeture / ISO Scatter")
     plt.xlabel("Shutter Speed (s)")
     plt.ylabel("Apeture")
@@ -199,6 +202,9 @@ def create_shutter_speed_apeture_focal_length_scatter(image_metadatas, lens_mode
     # Create bar chart
     plt.figure()
     plt.scatter(shutter_speeds, apetures, c=focal_lengths, cmap='managua', s=sizes)
+    # ax = plt.gca()
+    # ax.set_xlim([0, 0.05])
+    # ax.set_ylim([3, 12])
     plt.title(f"Shutter Speed / Apeture / Focal Length Scatter")
     plt.xlabel("Shutter Speed (s)")
     plt.ylabel("Apeture")
