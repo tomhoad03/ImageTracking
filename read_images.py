@@ -15,7 +15,7 @@ class ImageMetadata:
         print(f"{self.focal_length} : {self.iso} : {self.shutter_speed} : {self.apeture}")
 
 
-def create_focal_length_histogram(image_metadatas, lens_model, figure_name):    
+def create_focal_length_histogram(image_metadatas, lens_model, figure_name, bins):    
     # Filter by kit lens
     image_metadatas = [x for x in image_metadatas if x.lens_model == lens_model]
     
@@ -27,7 +27,7 @@ def create_focal_length_histogram(image_metadatas, lens_model, figure_name):
 
     # Create histogram
     plt.figure()
-    plt.hist(focal_lengths, bins=25, edgecolor="black")
+    plt.hist(focal_lengths, bins=bins, edgecolor="black")
     plt.title("Focal Length Histogram")
     plt.xlabel("Focal Length (mm)")
     plt.ylabel("Frequency")
@@ -60,7 +60,7 @@ def create_iso_barchart(image_metadatas, lens_model, figure_name):
     plt.savefig(f"graphs/{figure_name}.png", dpi=300)
     
 
-def create_shutter_speed_histogram(image_metadatas, lens_model, figure_name):
+def create_shutter_speed_histogram(image_metadatas, lens_model, figure_name, bins, max_shutter_speed):
     # Filter by kit lens
     image_metadatas = [x for x in image_metadatas if x.lens_model == lens_model]
     
@@ -68,11 +68,12 @@ def create_shutter_speed_histogram(image_metadatas, lens_model, figure_name):
     image_metadatas.sort(key=lambda x: x.shutter_speed)
     shutter_speeds = []
     for image_metadata in image_metadatas:
-        shutter_speeds.append(image_metadata.shutter_speed)
+        if (image_metadata.shutter_speed <= max_shutter_speed):
+            shutter_speeds.append(image_metadata.shutter_speed)
 
     # Create histogram
     plt.figure()
-    plt.hist(shutter_speeds, bins=75, edgecolor="black")
+    plt.hist(shutter_speeds, bins=bins, edgecolor="black")
     plt.title("Shutter Speed Histogram")
     plt.xlabel("Shutter Speed (s)")
     plt.ylabel("Frequency")
@@ -230,14 +231,17 @@ if __name__ == "__main__":
                                 float(image_exif.get_ifd(34665).get(33437)))
         image_metadatas.append(image_metadata)
     
-    create_focal_length_histogram(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "FocalLengthHistogramKit")
-    create_focal_length_histogram(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "FocalLengthHistogramTele")
+    create_focal_length_histogram(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "FocalLengthHistogramKit", 25)
+    create_focal_length_histogram(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "FocalLengthHistogramTele", 25)
     
     create_iso_barchart(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "ISOBarChartKit")
     create_iso_barchart(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "ISOBarChartTele")
     
-    create_shutter_speed_histogram(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "ShutterSpeedHistogramKit")
-    create_shutter_speed_histogram(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "ShutterSpeedHistogramTele")
+    create_shutter_speed_histogram(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "ShutterSpeedHistogramKit", 75, 30)
+    create_shutter_speed_histogram(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "ShutterSpeedHistogramTele", 75, 30)
+    
+    create_shutter_speed_histogram(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "ShutterSpeedHistogramAdjustedKit", 30, 0.05)
+    create_shutter_speed_histogram(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "ShutterSpeedHistogramAdjustedTele", 30, 0.02)
     
     create_apeture_barchart(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "ApetureBarChartKit")
     create_apeture_barchart(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "ApetureBarChartTele")

@@ -5,6 +5,8 @@
 ![ApetureBarChartTele](graphs/ApetureBarChartTele.png)
 ![ShutterSpeedHistogramKit](graphs/ShutterSpeedHistogramKit.png)
 ![ShutterSpeedHistogramTele](graphs/ShutterSpeedHistogramTele.png)
+![ShutterSpeedHistogramAdjustedKit](graphs/ShutterSpeedHistogramAdjustedKit.png)
+![ShutterSpeedHistogramAdjustedTele](graphs/ShutterSpeedHistogramAdjustedTele.png)
 ![ISOBarChartKit](graphs/ISOBarChartKit.png)
 ![ISOBarChartTele](graphs/ISOBarChartTele.png)
 ![FocalLengthHistogramKit](graphs/FocalLengthHistogramKit.png)
