@@ -1,2 +1,4 @@
 /images/*.JPG
 /images/*.zip
+/images/*/*.JPG
+/images/*/*.zip

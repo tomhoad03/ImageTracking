@@ -221,7 +221,7 @@ if __name__ == "__main__":
     image_metadatas = []
 
     # Read the metadata from the images
-    for image_name in glob.glob("images/*.JPG"):
+    for image_name in glob.glob("images/*/*.JPG"):
         image = Image.open(image_name)
         image_exif = image.getexif()
         image_metadata = ImageMetadata(str(image_exif.get_ifd(34665).get(42036)),
