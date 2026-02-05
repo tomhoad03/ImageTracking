@@ -1,18 +1,20 @@
 from PIL import Image
 import glob
+import os
 import matplotlib.pyplot as plt
 from collections import Counter
 
 class ImageMetadata:
-    def __init__(self, lens_model, focal_length, iso, shutter_speed, apeture):
+    def __init__(self, lens_model, focal_length, iso, shutter_speed, apeture, file_size):
         self.lens_model = lens_model
         self.focal_length = focal_length
         self.iso = iso
         self.shutter_speed = shutter_speed
         self.apeture = apeture
+        self.file_size = file_size
 
     def info(self):
-        print(f"{self.focal_length} : {self.iso} : {self.shutter_speed} : {self.apeture}")
+        print(f"{self.lens_model} : {self.focal_length} : {self.iso} : {self.shutter_speed} : {self.apeture} : {self.file_size}")
 
 
 def create_focal_length_histogram(image_metadatas, lens_model, figure_name, bins):    
@@ -103,6 +105,25 @@ def create_apeture_barchart(image_metadatas, lens_model, figure_name):
     plt.xlabel("Apeture")
     plt.ylabel("Frequency")
     plt.xticks(apeture_strings)
+    plt.savefig(f"graphs/{figure_name}.png", dpi=300)
+    
+    
+def create_file_size_histogram(image_metadatas, lens_model, figure_name, bins):
+    # Filter by kit lens
+    image_metadatas = [x for x in image_metadatas if x.lens_model == lens_model]
+    
+    # Sort by file size
+    image_metadatas.sort(key=lambda x: x.file_size)
+    file_sizes = []
+    for image_metadata in image_metadatas:
+        file_sizes.append(image_metadata.file_size)
+
+    # Create histogram
+    plt.figure()
+    plt.hist(file_sizes, bins=bins, edgecolor="black")
+    plt.title("File Size Histogram")
+    plt.xlabel("File Size (MB)")
+    plt.ylabel("Frequency")
     plt.savefig(f"graphs/{figure_name}.png", dpi=300)
 
 
@@ -224,11 +245,13 @@ if __name__ == "__main__":
     for image_name in glob.glob("images/*/*.JPG"):
         image = Image.open(image_name)
         image_exif = image.getexif()
+        size_bytes = os.path.getsize(image_name)
         image_metadata = ImageMetadata(str(image_exif.get_ifd(34665).get(42036)),
                                 float(image_exif.get_ifd(34665).get(37386)),
                                 int(image_exif.get_ifd(34665).get(34855)),
                                 float(image_exif.get_ifd(34665).get(33434)),
-                                float(image_exif.get_ifd(34665).get(33437)))
+                                float(image_exif.get_ifd(34665).get(33437)),
+                                float(size_bytes / 1000000))
         image_metadatas.append(image_metadata)
     
     create_focal_length_histogram(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "FocalLengthHistogramKit", 25)
@@ -245,6 +268,9 @@ if __name__ == "__main__":
     
     create_apeture_barchart(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "ApetureBarChartKit")
     create_apeture_barchart(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "ApetureBarChartTele")
+    
+    create_file_size_histogram(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "FileSizeHistogramKit", 25)
+    create_file_size_histogram(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "FileSizeHistogramTele", 25)
     
     create_shutter_speed_apeture_iso_scatter(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "ApetureShutterISOScatterKit")
     create_shutter_speed_apeture_iso_scatter(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "ApetureShutterISOScatterTele")

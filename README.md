@@ -15,3 +15,5 @@
 ![ApetureShutterFocalScatterTele](graphs/ApetureShutterFocalScatterTele.png)
 ![ApetureShutterISOScatterKit](graphs/ApetureShutterISOScatterKit.png)
 ![ApetureShutterISOScatterTele](graphs/ApetureShutterISOScatterTele.png)
+![FileSizeHistogramKit](graphs/FileSizeHistogramKit.png)
+![FileSizeHistogramTele](graphs/FileSizeHistogramTele.png)
