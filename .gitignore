@@ -3,9 +3,6 @@
 /images/*/*.JPG
 /images/*/*.zip
 
-/objects/*_0*.JPG.pkl
-/objects/*/*_0*.JPG.pkl
-
 /objects/*_1*.JPG.pkl
 /objects/*/*_1*.JPG.pkl
 
