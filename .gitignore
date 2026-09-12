@@ -1,4 +1,7 @@
 /images/*.JPG
 /images/*.zip
+/images/*.CR2
+
 /images/*/*.JPG
 /images/*/*.zip
+/images/*/*.CR2
