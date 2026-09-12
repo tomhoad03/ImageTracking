@@ -2,3 +2,6 @@
 /images/*.zip
 /images/*/*.JPG
 /images/*/*.zip
+
+/objects/*.pkl
+/objects/*/*.pkl

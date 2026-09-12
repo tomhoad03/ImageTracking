@@ -1,6 +1,8 @@
 from PIL import Image
+from pathlib import Path
 import glob
 import os
+import pickle
 import matplotlib.pyplot as plt
 from collections import Counter
 
@@ -238,10 +240,8 @@ def create_shutter_speed_apeture_focal_length_scatter(image_metadatas, lens_mode
 if __name__ == "__main__":
     # plt basic params
     plt.rcParams["figure.figsize"] = (16, 16)
-    
-    image_metadatas = []
 
-    # Read the metadata from the images
+    # Read the metadata from the images and save to pickle
     for image_name in glob.glob("images/*/*.JPG"):
         image = Image.open(image_name)
         image_exif = image.getexif()
@@ -252,7 +252,17 @@ if __name__ == "__main__":
                                 float(image_exif.get_ifd(34665).get(33434)),
                                 float(image_exif.get_ifd(34665).get(33437)),
                                 float(size_bytes / 1000000))
-        image_metadatas.append(image_metadata)
+        
+        with open("objects/" + Path(image_name).parent.name + "/" + os.path.basename(image_name) + ".pkl", "wb") as f:
+            pickle.dump(image_metadata, f)
+            
+    image_metadatas = []
+
+    # Read the metadata from the images
+    for image_name in glob.glob("objects/*/*.pkl"):
+        with open(image_name, "rb") as f:
+            image_metadata = pickle.load(f)
+            image_metadatas.append(image_metadata)
     
     create_focal_length_histogram(image_metadatas, "EF-S18-55mm f/3.5-5.6 IS II", "FocalLengthHistogramKit", 25)
     create_focal_length_histogram(image_metadatas, "EF-S55-250mm f/4-5.6 IS STM", "FocalLengthHistogramTele", 25)
